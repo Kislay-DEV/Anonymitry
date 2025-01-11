@@ -38,6 +38,7 @@ function Login() {
       const response = await axiosInstance.post('/api/anonymous', anonymousData);
       console.log('Anonymous data sent:', response.data);
       console.log('Received userid:', response.data.userid);
+      navigate('/anonymous/dashboard')
     } catch (error) {
       console.error('Error sending anonymous data:', error);
     }

@@ -1,5 +1,13 @@
 import React, { useEffect, useState } from 'react';
 import axiosInstance from '../axiosConfig';
+import Sidebar from './../components/sidebar';
+// import { SidebarProvider, SidebarTrigger } from "../components/components/ui/sidebar"
+// import { AppSidebar } from "../components/components/ui/sidebar"
+
+
+    
+  
+
 
 function Dashboard() {
   const [user, setUser] = useState({ name: '', email: '' });
@@ -53,9 +61,16 @@ function Dashboard() {
 
   return (
     <div className="bg-gray-900 min-h-screen text-white flex flex-col items-center">
+      {/* <Sidebar/> */}
       <h1 className="text-4xl font-bold mt-10">Welcome to Your Dashboard</h1>
+     
 
-      
+      {/* <SidebarProvider>
+      <AppSidebar />
+      <main>
+        <SidebarTrigger />
+      </main> */}
+    {/* </SidebarProvider> */}
       {/* User Details */}
       <div className="mt-8 p-6 flex justify-around bg-gray-800 rounded-lg shadow-lg w-1/3">
         <div className="w-24  h-24 object-contain rounded-full  bg-gray-700 flex justify-center items-center">
@@ -106,7 +121,9 @@ function Dashboard() {
       
     )}
     </div>
-     
+     {/* 
+     */}
+     <Sidebar/>
     </div>
   );
 }
