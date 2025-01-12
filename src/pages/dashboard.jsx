@@ -123,7 +123,7 @@ function Dashboard() {
     </div>
      {/* 
      */}
-     <Sidebar/>
+     <Sidebar image={bannerImage} username = {user.name}/>
     </div>
   );
 }

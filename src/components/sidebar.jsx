@@ -2,7 +2,7 @@ import React, { useState } from 'react';
 import { useForm } from 'react-hook-form';
 import axiosInstance from './../axiosConfig';
 
-const Sidebar = () => {
+const Sidebar = (props) => {
 
   const [isOpen, setIsOpen] = useState(false);
   const [isEditing, setIsEditing] = useState(false);
@@ -28,20 +28,20 @@ const Sidebar = () => {
     try {
       const response = await axiosInstance.post("/api/profile/edit/username", { newUsername: data.newUsername });
       console.log('New Username:', response.data);
-      // alert(`Username updated to: ${data.newUsername}`);
+      alert(`Username updated to: ${data.newUsername}`);
       setIsEditing(false);
     } catch (error) {
       console.error('Error updating username:', error.response?.data || error.message);
-      alert('Failed to update username.');
+      // alert('Failed to update username.');
     }
     try {
       const response = await axiosInstance.post("/api/profile/edit/email", { newEmail: data.newEmail });
       console.log('New email:', response.data);
-      // alert(`email updated to: ${data.newEmail}`);
+      alert(`email updated to: ${data.newEmail}`);
       setIsEditing(false);
     } catch (error) {
       console.error('Error updating email:', error.response?.data || error.message);
-      alert('Failed to update email.');
+      // alert('Failed to update email.');
     }
   };
 
@@ -67,14 +67,15 @@ const Sidebar = () => {
       >
         {/* Profile Section */}
         <div className="flex flex-col items-center mt-8">
-          <div className="w-20 h-20 rounded-full overflow-hidden border-2 border-gray-700">
+          <div className="w-24  h-24 object-contain rounded-full  bg-gray-700 flex justify-center items-center">
             <img
-              src="https://via.placeholder.com/150" // Replace with user-uploaded image URL
+              // eslint-disable-next-line react/prop-types
+              src={props.image}  // Replace with user-uploaded image URL
               alt="Profile Avatar"
-              className="object-contain w-full h-full"
+              className="w-full h-full object-cover rounded-full"
             />
           </div>
-          <h2 className="mt-4 text-xl font-semibold">User Name</h2>
+          <h2 className="mt-4 text-xl font-semibold">{props.username}</h2>
         </div>
 
         {/* Edit Button */}
