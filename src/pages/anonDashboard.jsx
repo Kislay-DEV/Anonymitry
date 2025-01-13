@@ -10,7 +10,6 @@ import axiosInstance from '../axiosConfig';
 //   AlertTitle,
 // } from "../components/components/ui/alert"
  
-
 export default function AnonDashboard() {
   const [username, setUsername] = useState('');
   const [selectedFile, setSelectedFile] = useState(null);
@@ -20,7 +19,7 @@ export default function AnonDashboard() {
   useEffect(() => {
     const fetchAnonymousUserData = async () => {
       try {
-        const response = await axiosInstance.get('/api/anonymous');
+        const response = await axiosInstance.get('/api/dashboard/anonymous');
         setUsername(response.data.username);
         if (response.data.image) {
           setBannerImage(`data:image/jpeg;base64,${response.data.image}`);
@@ -49,11 +48,11 @@ export default function AnonDashboard() {
     formData.append('image', selectedFile);
 
     try {
-        await axiosInstance.post('/api/image/upload/anonymous', formData, {
+        await axiosInstance.put('/api/image/upload/anonymous', formData, {
             headers: {
                 'Content-Type': 'multipart/form-data',
             },
-            withCredentials: true, // Ensure cookies are sent
+            withCredentials: true,
         });
         alert('Image uploaded successfully');
     } catch (error) {

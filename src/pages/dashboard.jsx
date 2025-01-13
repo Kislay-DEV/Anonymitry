@@ -47,7 +47,7 @@ function Dashboard() {
     formData.append('image', selectedFile);
 
     try {
-      const response = await axiosInstance.post('/api/image/upload', formData, {
+      const response = await axiosInstance.put('/api/image/upload', formData, {
         headers: { 'Content-Type': 'multipart/form-data' },
       });
 
