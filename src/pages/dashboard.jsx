@@ -1,6 +1,7 @@
 import React, { useEffect, useState } from 'react';
 import axiosInstance from '../axiosConfig';
 import {Button} from "@/components/ui/button.jsx"
+import Sidebar from '@/components/sidebar';
 
 
 function Dashboard() {
@@ -55,17 +56,9 @@ function Dashboard() {
 
   return (
     <div className="bg-gray-900 min-h-screen text-white flex flex-col items-center">
-      {/* <Sidebar/> */}
+     
       <h1 className="text-4xl font-bold mt-10">Welcome to Your Dashboard</h1>
      
-
-      {/* <SidebarProvider>
-      <AppSidebar />
-      <main>
-        <SidebarTrigger />
-      </main> */}
-    {/* </SidebarProvider> */}
-      {/* User Details */}
       <div className="mt-8 p-6 flex justify-around bg-gray-800 rounded-lg shadow-lg w-1/3">
         <div className="w-24  h-24 object-contain rounded-full  bg-gray-700 flex justify-center items-center">
           {bannerImage ? (
@@ -116,6 +109,7 @@ function Dashboard() {
     )}
     </div>
     <Button>Search Users</Button>
+    <Sidebar image={bannerImage}/>
      </div>
   );
 }

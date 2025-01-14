@@ -68,7 +68,7 @@ const Sidebar = (props) => {
       >
         {/* Profile Section */}
         <div className="flex flex-col items-center mt-8">
-          <div className="w-24  h-24 object-contain rounded-full  bg-gray-700 flex justify-center items-center">
+          <div className="w-16  h-16 object-contain rounded-full  bg-gray-700 flex justify-center items-center">
             <img
               // eslint-disable-next-line react/prop-types
               src={props.image}  // Replace with user-uploaded image URL

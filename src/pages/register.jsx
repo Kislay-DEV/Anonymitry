@@ -1,6 +1,4 @@
-// filepath: /E:/SIGMA WEB DEVELOPMENT/Anonymitry/Anonymitry - Frontend/src/pages/Register.jsx
 import React from 'react';
-import { useState } from 'react';
 import  useSocket  from '@/context/useSocket';
 import { useForm } from 'react-hook-form';
 import { useNavigate } from 'react-router-dom';
