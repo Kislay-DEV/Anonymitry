@@ -1,12 +1,6 @@
 import React, { useEffect, useState } from 'react';
 import axiosInstance from '../axiosConfig';
-import Sidebar from './../components/sidebar';
-// import { SidebarProvider, SidebarTrigger } from "../components/components/ui/sidebar"
-// import { AppSidebar } from "../components/components/ui/sidebar"
-
-
-    
-  
+import {Button} from "@/components/ui/button.jsx"
 
 
 function Dashboard() {
@@ -47,7 +41,7 @@ function Dashboard() {
     formData.append('image', selectedFile);
 
     try {
-      const response = await axiosInstance.put('/api/image/upload', formData, {
+      const response = await axiosInstance.post('/api/image/upload', formData, {
         headers: { 'Content-Type': 'multipart/form-data' },
       });
 
@@ -121,13 +115,9 @@ function Dashboard() {
       
     )}
     </div>
-     {/* 
-     */}
-     <Sidebar image={bannerImage} username = {user.name}/>
-    </div>
+    <Button>Search Users</Button>
+     </div>
   );
 }
 
 export default Dashboard;
-
-

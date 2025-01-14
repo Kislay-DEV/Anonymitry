@@ -1,32 +1,31 @@
 import React from 'react';
+import { useState } from 'react';
 import { useForm } from 'react-hook-form';
+import  useSocket  from '@/context/useSocket';
 import axiosInstance from '../axiosConfig';
 import {useNavigate} from "react-router-dom"
+import {io} from "socket.io-client"
 
-function Login() {
-  const navigate = useNavigate()
-  const {
-    register,
-    handleSubmit,
-    formState: { errors },
-  } = useForm();
+
+const Login = () => {
+  const navigate = useNavigate();
+   const { register, handleSubmit, formState: { errors } } = useForm();
+  const {setSocket} = useSocket()
 
   const onSubmit = async (data) => {
     try {
-      const response = await axiosInstance.post(`/api/login`, data); // Use /api/login
-      console.log(response.data);
-      navigate('/dashboard')
+      const response = await axiosInstance.post('/api/login', data);
+      console.log('Login successful:', response.data);
+
+      // Connect to the Socket.IO server
+      const socketConnection = io('http://localhost:3000', { withCredentials: true });
+      setSocket(socketConnection);
+      console.log("Connected to socket server")
+
+      navigate('/dashboard');
+      console.log("Succes in conecting to socket")
     } catch (error) {
       console.error('Error logging in:', error);
-      if (error.response) {
-        console.error('Response data:', error.response.data);
-        console.error('Response status:', error.response.status);
-        console.error('Response headers:', error.response.headers);
-      } else if (error.request) {
-        console.error('Request data:', error.request);
-      } else {
-        console.error('Error message:', error.message);
-      }
     }
   };
 

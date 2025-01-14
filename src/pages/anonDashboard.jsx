@@ -1,15 +1,10 @@
 import React, { useState, useEffect } from 'react';
 import axiosInstance from '../axiosConfig';
 
-// import { Button } from "../components/components/ui/button.jsx";
-// import { Terminal } from "lucide-react"
- 
-// import {
-//   Alert,
-//   AlertDescription,
-//   AlertTitle,
-// } from "../components/components/ui/alert"
- 
+import { Button } from "@/components/ui/button"
+
+
+
 export default function AnonDashboard() {
   const [username, setUsername] = useState('');
   const [selectedFile, setSelectedFile] = useState(null);
@@ -48,7 +43,7 @@ export default function AnonDashboard() {
     formData.append('image', selectedFile);
 
     try {
-        await axiosInstance.put('/api/image/upload/anonymous', formData, {
+        await axiosInstance.post('/api/image/upload/anonymous', formData, {
             headers: {
                 'Content-Type': 'multipart/form-data',
             },
@@ -117,14 +112,7 @@ export default function AnonDashboard() {
           </span>
         )}
       </div>
-      {/* <Button>helo</Button> */}
-      {/* <Alert> */}
-      {/* <Terminal className="h-4 w-4" />
-      <AlertTitle>Heads up!</AlertTitle>
-      <AlertDescription>
-        You can add components to your app using the cli.
-      </AlertDescription>
-    </Alert> */}
+     <Button>Search User</Button>
     </div>
   );
 }

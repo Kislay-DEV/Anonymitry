@@ -1,7 +1,7 @@
 /* eslint-disable react/prop-types */
 import React, { useState } from 'react';
 import { useForm } from 'react-hook-form';
-import axiosInstance from './../axiosConfig';
+import axiosInstance from '../axiosConfig';
 
 const Sidebar = (props) => {
 

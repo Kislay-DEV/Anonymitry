@@ -1,33 +1,33 @@
 // filepath: /E:/SIGMA WEB DEVELOPMENT/Anonymitry/Anonymitry - Frontend/src/pages/Register.jsx
 import React from 'react';
+import { useState } from 'react';
+import  useSocket  from '@/context/useSocket';
 import { useForm } from 'react-hook-form';
 import { useNavigate } from 'react-router-dom';
 import axiosInstance from '../axiosConfig';
+import { io } from 'socket.io-client';
 
 function Register() {
-
-  const navigate = useNavigate()
-
-  const {
-    register,
-    handleSubmit,
-    formState: { errors },
-  } = useForm();
+  const navigate = useNavigate();
+  const { register, handleSubmit, formState: { errors } } = useForm();
+  const { setSocket } = useSocket();
 
   const onSubmit = async (data) => {
     try {
-      const hello = "hello"
       const response = await axiosInstance.post('/api/register', data); // Make API call
       if (response.status === 201) { // Check for successful status code
+        // Connect to the Socket.IO server
+        const socketConnection = io('http://localhost:3000', { withCredentials: true });
+        setSocket(socketConnection);
+        console.log("Connected to socket server")
+
         navigate('/dashboard'); // Redirect to dashboard
       } else {
         console.error('Failed to register:', response.data);
       }
     } catch (error) {
-      console.error('Error occurred during registration:', error);
-      alert('Registration failed. Please try again.'); // Display error to user
+      console.error('Error registering:', error);
     }
-    // You can handle form submission here, e.g., send data to the server
   };
 
   return (
