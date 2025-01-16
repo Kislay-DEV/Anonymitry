@@ -2,6 +2,7 @@ import React, { useEffect, useState } from 'react';
 import axiosInstance from '../axiosConfig';
 import {Button} from "@/components/ui/button.jsx"
 import Sidebar from '@/components/sidebar';
+import { useNavigate } from 'react-router-dom';
 
 
 function Dashboard() {
@@ -10,6 +11,7 @@ function Dashboard() {
   const [selectedFile, setSelectedFile] = useState(null);
   const [toggle, setToggle] = useState(false)
 
+const navigate= useNavigate()
   // Fetch user details
   useEffect(() => {
     const fetchUserData = async () => {
@@ -54,10 +56,21 @@ function Dashboard() {
     }
   };
 
+  const handleLogout = async() => {
+    try {
+      await axiosInstance.get("/api/logout");
+      navigate('/'); // Redirect to login page after logout
+    } catch (error) {
+      console.error('Error logging out:', error);
+      alert('Failed to logout');
+    }
+  };
+
   return (
     <div className="bg-gray-900 min-h-screen text-white flex flex-col items-center">
      
       <h1 className="text-4xl font-bold mt-10">Welcome to Your Dashboard</h1>
+      <Button onClick={handleLogout}>Logout</Button>
      
       <div className="mt-8 p-6 flex justify-around bg-gray-800 rounded-lg shadow-lg w-1/3">
         <div className="w-24  h-24 object-contain rounded-full  bg-gray-700 flex justify-center items-center">
@@ -108,7 +121,7 @@ function Dashboard() {
       
     )}
     </div>
-    <Button>Search Users</Button>
+    <Button onClick={()=>navigate('/messages')} >Message user</Button>
     <Sidebar image={bannerImage}/>
      </div>
   );
