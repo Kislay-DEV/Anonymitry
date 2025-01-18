@@ -11,7 +11,6 @@ import Dashboard from './pages/dashboard'
 import Messaging from './pages/messages'
 import AnonDashboard from "./pages/anonDashboard"
 import MessagingUser from './pages/messagingUser'
-
 function App() {
   const [userId, setUserId] = useState(null);
   const isAuthenticated = !!userId; // Determine authentication status

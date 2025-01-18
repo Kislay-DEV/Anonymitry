@@ -4,6 +4,7 @@ import { useForm } from 'react-hook-form';
 import { useNavigate } from 'react-router-dom';
 import axiosInstance from '../axiosConfig';
 import { io } from 'socket.io-client';
+import { User, Lock, ArrowRight, UserPlus, Mail } from 'lucide-react';
 
 function Register() {
   const navigate = useNavigate();
@@ -29,45 +30,91 @@ function Register() {
   };
 
   return (
-    <div className="bg-slate-600 flex items-center justify-center min-h-screen">
-      <div className="bg-gray-800 rounded-2xl border-blue-500 border-4 space-y-1 p-8 w-full max-w-md shadow-2xl">
-        <h2 className="text-3xl font-semibold text-blue-700 mt-5 mb-9 text-center">Register</h2>
-        <form onSubmit={handleSubmit(onSubmit)} className="flex justify-center items-center flex-col">
-          <div className="mb-4 w-full">
-            <label htmlFor="username" className="block text-sm font-medium text-gray-300">Username</label>
+    <div className="min-h-screen bg-gradient-to-br from-slate-800 to-slate-900 flex items-center justify-center p-4">
+    <div className="w-full max-w-md">
+      {/* Main Register Card */}
+      <div className="bg-slate-800 rounded-xl border border-blue-500/20 shadow-xl shadow-blue-500/10 p-8 backdrop-blur-sm">
+        {/* Header */}
+        <div className="text-center mb-8">
+          <h2 className="text-3xl font-bold text-white mb-2">Create Account</h2>
+          <p className="text-slate-400">Fill in the details below to register</p>
+        </div>
+  
+        {/* Register Form */}
+        <form onSubmit={handleSubmit(onSubmit)} className="space-y-6">
+          {/* Username Input */}
+          <div className="relative">
+            <User className="absolute left-3 top-1/2 -translate-y-1/2 text-slate-400 h-5 w-5" />
             <input
               type="text"
               id="username"
               {...register('username', { required: true })}
-              className="mt-1 block w-full px-3 py-2 bg-transparent border-2 border-blue-600 rounded-md shadow-sm text-white focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm"
+              placeholder="Username"
+              className="w-full bg-slate-900/50 text-white rounded-lg pl-10 pr-4 py-3 border border-slate-700 focus:border-blue-500 focus:ring-1 focus:ring-blue-500 transition-all outline-none placeholder:text-slate-500"
             />
-            {errors.username && <span className="text-red-500 text-sm">Username is required</span>}
+            {errors.username && (
+              <span className="text-red-500 text-sm">Username is required</span>
+            )}
           </div>
-          <div className="mb-4 w-full">
-            <label htmlFor="email" className="block text-sm font-medium text-gray-300">Email</label>
+  
+          {/* Email Input */}
+          <div className="relative">
+            <Mail className="absolute left-3 top-1/2 -translate-y-1/2 text-slate-400 h-5 w-5" />
             <input
               type="email"
               id="email"
               {...register('email', { required: true })}
-              className="mt-1 block w-full px-3 py-2 bg-transparent border-2 border-blue-600 rounded-md shadow-sm text-white focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm"
+              placeholder="Email"
+              className="w-full bg-slate-900/50 text-white rounded-lg pl-10 pr-4 py-3 border border-slate-700 focus:border-blue-500 focus:ring-1 focus:ring-blue-500 transition-all outline-none placeholder:text-slate-500"
             />
-            {errors.email && <span className="text-red-500 text-sm">Email is required</span>}
+            {errors.email && (
+              <span className="text-red-500 text-sm">Email is required</span>
+            )}
           </div>
-          <div className="mb-4 w-full">
-            <label htmlFor="password" className="block text-sm font-medium text-gray-300">Password</label>
+  
+          {/* Password Input */}
+          <div className="relative">
+            <Lock className="absolute left-3 top-1/2 -translate-y-1/2 text-slate-400 h-5 w-5" />
             <input
               type="password"
               id="password"
               {...register('password', { required: true })}
-              className="mt-1 block w-full px-3 py-2 bg-transparent border-2 border-blue-600 rounded-md shadow-sm text-white focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm"
+              placeholder="Password"
+              className="w-full bg-slate-900/50 text-white rounded-lg pl-10 pr-4 py-3 border border-slate-700 focus:border-blue-500 focus:ring-1 focus:ring-blue-500 transition-all outline-none placeholder:text-slate-500"
             />
-            {errors.email && <span className="text-red-500 text-sm">Email is required</span>}
+            {errors.password && (
+              <span className="text-red-500 text-sm">Password is required</span>
+            )}
           </div>
-          <button type="submit" className="mt-4 px-24 py-2 mb-3 bg-blue-600 text-white rounded-md">Register</button>
+  
+          {/* Submit Button */}
+          <button
+            type="submit"
+            className="w-full bg-blue-600 hover:bg-blue-500 text-white py-3 px-4 rounded-lg font-medium transition-colors flex items-center justify-center group"
+          >
+            Register
+          </button>
         </form>
-        <p className="block mt-16 ml-[78px] text-white relative -bottom-1">Already have an account? <a className="text-blue-500" href="/login">login</a></p>
+  
+        {/* Divider */}
+        <div className="flex items-center my-6">
+          <div className="flex-1 border-t border-slate-700"></div>
+          <span className="px-4 text-slate-500 text-sm">OR</span>
+          <div className="flex-1 border-t border-slate-700"></div>
+        </div>
+  
+        {/* Redirect to Login */}
+        <p className="text-center mt-8 text-slate-400">
+          Already have an account?{' '}
+          <a href="/" className="text-blue-500 hover:text-blue-400 transition-colors">
+            Login here
+          </a>
+        </p>
       </div>
     </div>
+  </div>
+  
+
   );
 }
 

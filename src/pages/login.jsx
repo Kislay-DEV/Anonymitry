@@ -1,6 +1,7 @@
 import React from 'react';
 import { useState } from 'react';
 import { useForm } from 'react-hook-form';
+import { User, Lock, ArrowRight, UserPlus } from 'lucide-react';
 import useSocket from '@/context/useSocket';
 import axiosInstance from '../axiosConfig';
 import { useNavigate } from 'react-router-dom';
@@ -65,43 +66,84 @@ const Login = () => {
   };
 
   return (
-    <div className="bg-slate-600 flex items-center justify-center min-h-screen">
-      <div className="bg-gray-800 rounded-2xl border-blue-500 border-4 space-y-2 i h-96 w-72">
-        <span className="text-3xl font-semibold text-blue-700 my-8 ml-24 inline-block">LOGIN</span>
-        <form className="flex justify-center items-center flex-col" onSubmit={handleSubmit(onSubmit)}>
-          <input
-            className="mt-6 px-2 py-1 bg-transparent border-2 border-blue-600 rounded-md my-2 mx-4 text-white"
-            type="text"
-            name="username"
-            placeholder="Username"
-            {...register('username', { required: true })}
-          />
-          {errors.username && <span className="text-red-500">Username is required</span>}
-          <input
-            className="px-2 py-1 bg-transparent border-2 border-blue-600 rounded-md my-2 mx-4 text-white"
-            type="password"
-            name="password"
-            placeholder="Password"
-            {...register('password', { required: true })}
-          />
-          {errors.password && <span className="text-red-500">Password is required</span>}
-          <input
-            className="bg-blue-500 relative cursor-pointer font-semibold rounded-md px-14 py-1 my-6 text-white"
-            type="submit"
+    <div className="min-h-screen bg-gradient-to-br from-slate-800 to-slate-900 flex items-center justify-center p-4">
+      <div className="w-full max-w-md">
+        {/* Main Login Card */}
+        <div className="bg-slate-800 rounded-xl border border-blue-500/20 shadow-xl shadow-blue-500/10 p-8 backdrop-blur-sm">
+          {/* Header */}
+          <div className="text-center mb-8">
+            <h2 className="text-3xl font-bold text-white mb-2">Welcome Back</h2>
+            <p className="text-slate-400">Please enter your details</p>
+          </div>
+
+          {/* Login Form */}
+          <form onSubmit={handleSubmit(onSubmit)} className="space-y-6">
+            {/* Username Input */}
+            <div className="relative">
+              <User className="absolute left-3 top-1/2 -translate-y-1/2 text-slate-400 h-5 w-5" />
+              <input
+                type="text"
+                {...register('username', { required: true })}
+              id="username"
+                placeholder="Username"
+                className="w-full bg-slate-900/50 text-white rounded-lg pl-10 pr-4 py-3 border border-slate-700 focus:border-blue-500 focus:ring-1 focus:ring-blue-500 transition-all outline-none placeholder:text-slate-500"
+              />
+            </div>
+
+            {/* Password Input */}
+            <div className="relative">
+              <Lock className="absolute left-3 top-1/2 -translate-y-1/2 text-slate-400 h-5 w-5" />
+              <input
+                type="password"
+                id='password'
+                {...register('password', { required: true })}
+                placeholder="Password"
+                className="w-full bg-slate-900/50 text-white rounded-lg pl-10 pr-4 py-3 border border-slate-700 focus:border-blue-500 focus:ring-1 focus:ring-blue-500 transition-all outline-none placeholder:text-slate-500"
+              />
+            </div>
+
+            {/* Remember Me & Forgot Password */}
+            <div className="flex items-center justify-between text-sm">
+              <label className="flex items-center text-slate-300">
+                <input type="checkbox" className="mr-2 rounded border-slate-700 bg-slate-900/50" />
+                Remember me
+              </label>
+              <a href="#" className="text-blue-500 hover:text-blue-400 transition-colors">
+                Forgot password?
+              </a>
+            </div>
+
+            {/* Submit Button */}
+            <input
+              type="submit"
             value="Login"
-          />
-        </form>
-        <p className="block mt-16 ml-7 text-white relative -bottom-3">
-          Don&apos;t have an account? <a className="text-blue-500" href="/register">Register</a>
-        </p>
+              className="w-full bg-blue-600 hover:bg-blue-500 text-white py-3 px-4 rounded-lg font-medium transition-colors flex items-center justify-center group"
+            />
+            
+          </form>
+
+          {/* Divider */}
+          <div className="flex items-center my-6">
+            <div className="flex-1 border-t border-slate-700"></div>
+            <span className="px-4 text-slate-500 text-sm">OR</span>
+            <div className="flex-1 border-t border-slate-700"></div>
+          </div>
+
+          {/* Anonymous Login Button */}
+          <button className="w-full bg-slate-700 hover:bg-slate-600 text-white py-3 px-4 rounded-lg font-medium transition-colors flex items-center justify-center group">
+            <UserPlus className="mr-2 h-5 w-5" />
+            Continue Anonymously
+          </button>
+
+          {/* Register Link */}
+          <p className="text-center mt-8 text-slate-400">
+            Don&apos;t have an account?{' '}
+            <a href="/register" className="text-blue-500 hover:text-blue-400 transition-colors">
+              Create one now
+            </a>
+          </p>
+        </div>
       </div>
-      <button
-        onClick={sendAnonymousData}
-        className="text-white text-lg flex space-x-3 px-5 py-2 ml-10 font-semibold bg-slate-800 border-2 border-blue-500 rounded-lg shadow-lg"
-      >
-        <img src="/8-512.webp" className="w-7 h-7 mr-2 rounded-full" alt="" />
-        Create Anonymous
-      </button>
     </div>
   );
 };
