@@ -11,6 +11,8 @@ import Dashboard from './pages/dashboard'
 import Messaging from './pages/messages'
 import AnonDashboard from "./pages/anonDashboard"
 import MessagingUser from './pages/messagingUser'
+import Feed from './pages/feed'
+
 function App() {
   const [userId, setUserId] = useState(null);
   const isAuthenticated = !!userId; // Determine authentication status
@@ -37,6 +39,7 @@ function App() {
         <Route path="/anonymous/dashboard" element={<AnonDashboard />} />
         <Route path="/messages" element={<Messaging userId={userId} />} />
         <Route path="/messages/:username" element={<MessagingUser />} />
+        <Route path="/feed" element={<Feed />} />
       </Routes>
     </SocketProvider>
   );

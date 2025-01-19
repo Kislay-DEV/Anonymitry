@@ -1,5 +1,5 @@
 import React from 'react';
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import { useForm } from 'react-hook-form';
 import { User, Lock, ArrowRight, UserPlus } from 'lucide-react';
 import useSocket from '@/context/useSocket';
@@ -12,31 +12,49 @@ const Login = () => {
   const { register, handleSubmit, formState: { errors } } = useForm();
   const { setSocket, socket } = useSocket(); // Access existing socket instance if available
 
+  const [socketId, setSocketId] = useState(null);
+  
+  // Add the useEffect here, at the top level of your component
+  useEffect(() => {
+    return () => {
+      if (socket) {
+        socket.disconnect();
+        setSocketId(null);
+      }
+    };
+  }, [socket, socketId]); 
+
   const onSubmit = async (data) => {
     try {
+
       const response = await axiosInstance.post('/api/login', data);
       console.log('Login successful:', response.data);
-
-      // Avoid creating a new socket if one already exists
+      
       if (!socket) {
         const socketConnection = io('http://localhost:3000', { withCredentials: true });
         setSocket(socketConnection);
-
+  
         socketConnection.on('connect', () => {
           console.log('Connected to socket server with ID:', socketConnection.id);
+          // Emit userLoggedIn event after successful connection
+          socketConnection.emit('userLoggedIn', User.name);
         });
-
+  
         socketConnection.on('disconnect', () => {
           console.log('Disconnected from socket server');
         });
+      } else {
+        // If socket already exists, just emit the login event
+        socket.emit('userLoggedIn', User.name);
       }
-
+  
       navigate('/dashboard');
     } catch (error) {
       console.error('Error logging in:', error);
       alert('Failed to log in. Please check your credentials.');
     }
   };
+
 
   const sendAnonymousData = async () => {
     try {
@@ -83,9 +101,9 @@ const Login = () => {
               <User className="absolute left-3 top-1/2 -translate-y-1/2 text-slate-400 h-5 w-5" />
               <input
                 type="text"
-                {...register('username', { required: true })}
-              id="username"
-                placeholder="Username"
+                {...register('userId', { required: true })}
+              id="userId"
+                placeholder="Username / Email"
                 className="w-full bg-slate-900/50 text-white rounded-lg pl-10 pr-4 py-3 border border-slate-700 focus:border-blue-500 focus:ring-1 focus:ring-blue-500 transition-all outline-none placeholder:text-slate-500"
               />
             </div>
@@ -130,7 +148,7 @@ const Login = () => {
           </div>
 
           {/* Anonymous Login Button */}
-          <button className="w-full bg-slate-700 hover:bg-slate-600 text-white py-3 px-4 rounded-lg font-medium transition-colors flex items-center justify-center group">
+          <button onClick={sendAnonymousData} className="w-full bg-slate-700 hover:bg-slate-600 text-white py-3 px-4 rounded-lg font-medium transition-colors flex items-center justify-center group">
             <UserPlus className="mr-2 h-5 w-5" />
             Continue Anonymously
           </button>

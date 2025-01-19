@@ -5,6 +5,9 @@ import Sidebar from '@/components/sidebar';
 import { useNavigate } from 'react-router-dom';
 import { LogOut, Upload, MessageSquare, User, Camera, Sparkles } from 'lucide-react';
 import { Textarea } from "@/components/ui/textarea"
+import useSocket from '@/context/useSocket';
+import { io } from 'socket.io-client';
+
 
 
 function Dashboard() {
@@ -12,7 +15,21 @@ function Dashboard() {
   const [bannerImage, setBannerImage] = useState(null);
   const [selectedFile, setSelectedFile] = useState(null);
   const [toggle, setToggle] = useState(false)
-  const [postData, setPostData] = useState([])
+  const [postData, setPostData] = useState([]);
+
+  const { setSocket, socket } = useSocket();
+
+    const [socketId, setSocketId] = useState(null);
+    
+    // Add the useEffect here, at the top level of your component
+    useEffect(() => {
+      return () => {
+        if (socket) {
+          socket.disconnect();
+          setSocketId(null);
+        }
+      };
+    }, [socket, socketId]); 
 
 const navigate= useNavigate()
   // Fetch user details
@@ -59,10 +76,26 @@ const navigate= useNavigate()
     }
   };
 
-  const handleLogout = async() => {
+  const handleLogout = async () => {
     try {
       await axiosInstance.get("/api/logout");
-      navigate('/'); // Redirect to login page after logout
+
+      
+      
+      // If socket exists, emit logout event and disconnect
+      if (socket) {
+        // Emit the userLoggedOut event before disconnecting
+        socket.emit('userLoggedOut', user.name); // Make sure you have access to userId
+        
+        // Disconnect the socket
+        socket.disconnect();
+        
+        // Clear the socket state
+        setSocket(null);
+      }
+  
+      // Navigate to home page
+      navigate('/');
     } catch (error) {
       console.error('Error logging out:', error);
       alert('Failed to logout');
@@ -72,7 +105,7 @@ const navigate= useNavigate()
   const Post = async () => {
     try {
       const response = await axiosInstance.get("/api/post")
-      setPostData(response.data.data)  // Access the nested data array
+      setPostData(response.data.posts)  // Access the nested data array
       console.log(response)
     }
     catch(error) {
@@ -217,22 +250,33 @@ const navigate= useNavigate()
         </form>
         <p className="text-slate-400"></p>
       </div>
-      <div className="bg-slate-800 rounded-lg shadow p-6">
-<h2 className='text-slate-400 text-3xl font-semibold p-4'>Your Posts</h2>
-  <h2 className="text-lg font-semibold text-white mb-4">
-    {postData.map((post) => (
-      <div key={post._id} className="bg-slate-700 mt-3 rounded-lg shadow p-6 mb-4 w-[33vw] inline-block mx-5">
-        <div className="flex items-center space-x-4 mb-4">
-          <h3 className="text-lg font-semibold text-white">{post.createdBy}</h3>
-          <p className="text-sm text-slate-400">{post.Time}</p>
+      <div className="bg-slate-800 rounded-lg shadow-xl p-6">
+  <h2 className="text-slate-300 text-3xl font-semibold p-4">Your Posts</h2>
+  <div className="space-y-4">
+    {postData && postData.length > 0 ? (
+      postData.map((post) => (
+        <div key={post._id} className="bg-slate-700 rounded-lg shadow-2xl p-6 mb-4 w-[33vw] inline-block mx-5">
+          <div className="flex items-center space-x-4 mb-4">
+            <h3 className="text-lg font-semibold text-white">{post.author.username}</h3>
+            <p className="text-sm text-slate-400">
+              {new Date(post.Time).toLocaleString("en-US", {
+                month: "short",
+                day: "numeric",
+                hour: "2-digit",
+                minute: "2-digit",
+              })}
+            </p>
+          </div>
+          <p className="text-white">{post.postData}</p>
         </div>
-        <p className="text-white">{post.postData}</p>
-      </div>
-    ))}
-  </h2>
-  <p className="text-slate-400">
-  </p>
+      ))
+    ) : (
+      <p className="text-slate-400">No posts available</p>
+    )}
+  </div>
 </div>
+
+
     </div>
   </main>
     <Sidebar image={bannerImage}/>
