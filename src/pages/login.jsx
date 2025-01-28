@@ -32,7 +32,7 @@ const Login = () => {
       
       if (!socket) {
         const socketConnection = io('http://localhost:3000', { withCredentials: true });
-        setSocket(socketConnection);
+        // setSocket(socketConnection);
   
         socketConnection.on('connect', () => {
           console.log('Connected to socket server with ID:', socketConnection.id);

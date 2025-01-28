@@ -1,25 +1,51 @@
-import { useState, useContext } from 'react';
-import { createContext } from "react";
-import PropTypes from 'prop-types';
+import React, { createContext, useContext, useState } from 'react';
 
 const AuthContext = createContext();
 
 // eslint-disable-next-line react-refresh/only-export-components
 export const useAuthContext = () => {
-    return useContext(AuthContext);
-}
+  const context = useContext(AuthContext);
+  if (!context) {
+    throw new Error('useAuthContext must be used within an AuthProvider');
+  }
+  return context;
+};
 
+// eslint-disable-next-line react/prop-types
 export const AuthProvider = ({ children }) => {
-    const [isAuthenticated, setIsAuthenticated] = useState(false);
-    
-    return (
-        <AuthContext.Provider value={{ isAuthenticated, setIsAuthenticated }}>
-            {children}
-        </AuthContext.Provider>
-    );
-}
+  const [isAuthenticated, setIsAuthenticated] = useState(false);
+  const [user, setUser] = useState(null);
+  const [loading, setLoading] = useState(false);
 
-AuthProvider.propTypes = {
-    children: PropTypes.node.isRequired,
-    // Remove isAuthenticated from PropTypes since it's managed internally
+  const login = async (userData) => {
+    try {
+      setLoading(true);
+      setUser(userData);
+      setIsAuthenticated(true);
+    } catch (error) {
+      console.error('Login error:', error);
+      throw error;
+    } finally {
+      setLoading(false);
+    }
+  };
+
+  const logout = async () => {
+    try {
+      setLoading(true);
+      setUser(null);
+      setIsAuthenticated(false);
+    } catch (error) {
+      console.error('Logout error:', error);
+      throw error;
+    } finally {
+      setLoading(false);
+    }
+  };
+
+  return (
+    <AuthContext.Provider value={{ isAuthenticated, user, loading, login, logout }}>
+      {children}
+    </AuthContext.Provider>
+  );
 };

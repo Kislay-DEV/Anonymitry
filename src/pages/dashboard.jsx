@@ -3,10 +3,11 @@ import axiosInstance from '../axiosConfig';
 import { useForm } from "react-hook-form"
 import Sidebar from '@/components/sidebar';
 import { useNavigate } from 'react-router-dom';
-import { LogOut, Upload, MessageSquare, User, Camera, Sparkles } from 'lucide-react';
+import { LogOut, Upload, MessageSquare, User, Camera, Sparkles,Trash } from 'lucide-react';
 import { Textarea } from "@/components/ui/textarea"
 import useSocket from '@/context/useSocket';
 import { io } from 'socket.io-client';
+import axios from 'axios';
 
 
 
@@ -16,20 +17,17 @@ function Dashboard() {
   const [selectedFile, setSelectedFile] = useState(null);
   const [toggle, setToggle] = useState(false)
   const [postData, setPostData] = useState([]);
-
-  const { setSocket, socket } = useSocket();
-
     const [socketId, setSocketId] = useState(null);
     
     // Add the useEffect here, at the top level of your component
-    useEffect(() => {
-      return () => {
-        if (socket) {
-          socket.disconnect();
-          setSocketId(null);
-        }
-      };
-    }, [socket, socketId]); 
+    // useEffect(() => {
+    //   return () => {
+    //     if (socket) {
+    //       socket.disconnect();
+    //       setSocketId(null);
+    //     }
+    //   };
+    // }, [socket, socketId]); 
 
 const navigate= useNavigate()
   // Fetch user details
@@ -76,25 +74,16 @@ const navigate= useNavigate()
     }
   };
 
+  const { socket, disconnectSocket } = useSocket();
+  
   const handleLogout = async () => {
     try {
-      await axiosInstance.get("/api/logout");
-
-      
-      
-      // If socket exists, emit logout event and disconnect
-      if (socket) {
-        // Emit the userLoggedOut event before disconnecting
-        socket.emit('userLoggedOut', user.name); // Make sure you have access to userId
-        
-        // Disconnect the socket
-        socket.disconnect();
-        
-        // Clear the socket state
-        setSocket(null);
+      if (socket && user?.name) {
+        socket.emit('userLoggedOut', user.name);
       }
-  
-      // Navigate to home page
+      
+      await axiosInstance.get("/api/logout");
+      disconnectSocket();
       navigate('/');
     } catch (error) {
       console.error('Error logging out:', error);
@@ -115,6 +104,17 @@ const navigate= useNavigate()
   useEffect(() => {
     Post()
   }, [])  
+
+
+  const handlePostDelete = async (postId) => {
+    try {
+      await axiosInstance.delete(`/api/post/delete/${postId}`);
+      setPostData(postData.filter(post => post._id !== postId));
+    } catch (error) {
+      console.error('Error deleting post:', error);
+      alert('Failed to delete post');
+    }
+  };
   
 
 
@@ -273,6 +273,7 @@ const navigate= useNavigate()
                 minute: "2-digit",
               })}
             </p>
+              <button className='hover:text-red-800 flex items-center space-x-2 text-slate-500 transition-colors' onClick={() => handlePostDelete(post._id)}><Trash ></Trash></button>
           </div>
           <p className="text-white">{post.postData}</p>
         </div>

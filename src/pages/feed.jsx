@@ -1,6 +1,7 @@
 import React from 'react';
 import axiosInstance from '@/axiosConfig';
 import { useState, useEffect } from 'react';
+import {Heart, Share} from 'lucide-react';
 
 const Feed = () => {
   const [posts, setPosts] = useState([]);
@@ -28,6 +29,25 @@ const Feed = () => {
       </div>
     );
   }
+
+  const handleLike = async (postId) => {
+    try {
+      const response = await axiosInstance.put(`/api/post/like/${postId}`);
+      setPosts(posts.map(post => post._id === postId ? { ...post, likes: response.data.likes } : post));
+    } catch (error) {
+      if (error.response && error.response.status === 400) {
+        alert('You have already liked this post');
+      } else {
+        console.error('Error liking post:', error);
+      }
+    }
+  };
+
+  const handleShare = (postId) => {
+    const shareableUrl = `${window.location.origin}/post/${postId}`;
+    navigator.clipboard.writeText(shareableUrl);
+    alert('Post URL copied to clipboard!');
+  };
 
   return (
     <div className="min-h-screen bg-slate-700 bg-gradient-to-b from-slate-600 to-slate-800">
@@ -90,13 +110,13 @@ const Feed = () => {
             <div className="px-4 py-3 bg-slate-600/50 backdrop-blur-sm rounded-b-xl 
                           border-t border-slate-500/30 flex items-center justify-between">
               <div className="flex space-x-6">
-                <button className="flex items-center space-x-2 text-slate-300 hover:text-blue-400 
+                <button onClick={() => handleLike(post._id)} className="flex items-center space-x-2 text-slate-300 hover:text-blue-400 
                                  transition-all duration-300 transform hover:scale-110">
                   <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                     <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" 
                           d="M4.318 6.318a4.5 4.5 0 000 6.364L12 20.364l7.682-7.682a4.5 4.5 0 00-6.364-6.364L12 7.636l-1.318-1.318a4.5 4.5 0 00-6.364 0z" />
                   </svg>
-                  <span className="text-sm font-medium">Like</span>
+                  <span className="text-sm font-medium">Like {post.likes}</span>
                 </button>
                 <button className="flex items-center space-x-2 text-slate-300 hover:text-blue-400 
                                  transition-all duration-300 transform hover:scale-110">
@@ -106,7 +126,7 @@ const Feed = () => {
                   </svg>
                   <span className="text-sm font-medium">Comment</span>
                 </button>
-                <button className="flex items-center space-x-2 text-slate-300 hover:text-blue-400 
+                <button onClick={() => handleShare(post._id)} className="flex items-center space-x-2 text-slate-300 hover:text-blue-400 
                                  transition-all duration-300 transform hover:scale-110">
                   <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                     <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" 

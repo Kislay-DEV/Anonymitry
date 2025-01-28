@@ -12,6 +12,7 @@ import Messaging from './pages/messages'
 import AnonDashboard from "./pages/anonDashboard"
 import MessagingUser from './pages/messagingUser'
 import Feed from './pages/feed'
+import Post from './pages/post'
 
 function App() {
   const [userId, setUserId] = useState(null);
@@ -40,6 +41,7 @@ function App() {
         <Route path="/messages" element={<Messaging userId={userId} />} />
         <Route path="/messages/:username" element={<MessagingUser />} />
         <Route path="/feed" element={<Feed />} />
+        <Route path="/post/:postId" element={<Post />} />
       </Routes>
     </SocketProvider>
   );
