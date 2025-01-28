@@ -1,9 +1,11 @@
 import React from 'react';
 import axiosInstance from '@/axiosConfig';
 import { useState, useEffect } from 'react';
-import {Heart, Share} from 'lucide-react';
+import { useNavigate } from 'react-router-dom';
+
 
 const Feed = () => {
+  const navigate = useNavigate();
   const [posts, setPosts] = useState([]);
   const [loading, setLoading] = useState(true);
 
@@ -47,6 +49,10 @@ const Feed = () => {
     const shareableUrl = `${window.location.origin}/post/${postId}`;
     navigator.clipboard.writeText(shareableUrl);
     alert('Post URL copied to clipboard!');
+  };
+
+  const HandleComment = (postId) => {
+    navigate(`/comment/${postId}`);
   };
 
   return (
@@ -118,7 +124,7 @@ const Feed = () => {
                   </svg>
                   <span className="text-sm font-medium">Like {post.likes}</span>
                 </button>
-                <button className="flex items-center space-x-2 text-slate-300 hover:text-blue-400 
+                <button onClick={()=>HandleComment(post._id)} className="flex items-center space-x-2 text-slate-300 hover:text-blue-400 
                                  transition-all duration-300 transform hover:scale-110">
                   <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                     <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" 
