@@ -17,7 +17,7 @@ function Register() {
       if (response.status === 201) { // Check for successful status code
         // Connect to the Socket.IO server
         const socketConnection = io('http://localhost:3000', { withCredentials: true });
-        setSocket(socketConnection);
+        // setSocket(socketConnection);
         console.log("Connected to socket server")
 
         navigate('/dashboard'); // Redirect to dashboard

@@ -14,6 +14,7 @@ import MessagingUser from './pages/messagingUser'
 import Feed from './pages/feed'
 import Post from './pages/post'
 import Comment from './pages/comment'
+import User from './pages/user'
 
 function App() {
   const [userId, setUserId] = useState(null);
@@ -44,6 +45,7 @@ function App() {
         <Route path="/feed" element={<Feed />} />
         <Route path="/post/:postId" element={<Post />} />
         <Route path="/comment/:postId" element={<Comment />} />
+        <Route path="/user/profile/:userId" element={<User />} />
       </Routes>
     </SocketProvider>
   );

@@ -24,7 +24,7 @@ export default function Messaging() {
   }, []);
 
   const handleUserClick = (user) => {
-    navigate(`/messages/${user.username}`);
+    navigate('/user/profile/' + user.username);
   };
 
   const filteredUsers = searchTerm
