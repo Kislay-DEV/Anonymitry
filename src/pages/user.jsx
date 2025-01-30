@@ -7,22 +7,23 @@ import { Buffer } from 'buffer';
 export default function User() {
   const { userId } = useParams();
   const [user, setUser] = useState({});
-  const [isFollowing, setIsFollowing] = useState(false);
+  const [isFollowing, setIsFollowing] = useState();
 
   useEffect(() => {
     const fetchUser = async () => {
       try {
         const response = await axiosInstance.get(`/api/user/profile/${userId}`);
         setUser(response.data);
-        if (response.isFollowing == true) {
-          setIsFollowing(!isFollowing);
+        if (response.data.isFollowing == true) {
+          setIsFollowing(isFollowing);
         }
+        setIsFollowing(!response.data.isFollowing);
       } catch (error) {
         console.error('Error fetching user data:', error);
       }
     };
     fetchUser();
-  }, [isFollowing, userId]);
+  }, [userId, isFollowing]);
 
   const handleFollow = async () => {
     try {
