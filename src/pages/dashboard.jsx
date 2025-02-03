@@ -110,11 +110,14 @@ function Dashboard() {
   const onSubmit = async (data) => {
     try {
       const response = await axiosInstance.post('/api/post', { postData: data.post });
+  
       if (response.status === 201) {
-        setPostData([response.data, ...postData]); // Add the new post to the beginning of the list
+        // Add the new post to the beginning of the list
+        setPostData([response.data.post, ...postData]);
       }
     } catch (error) {
       console.error('Error creating post:', error);
+      alert('Failed to create post');
     }
   };
 
@@ -250,33 +253,35 @@ function Dashboard() {
           <div className="bg-slate-800 rounded-lg shadow-xl p-6">
             <h2 className="text-slate-300 text-3xl font-semibold p-4">Your Posts</h2>
             <div className="space-y-4">
-              {postData && postData.length > 0 ? (
-                postData.map((post) => (
-                  <div key={post._id} className="bg-slate-700 rounded-lg shadow-2xl p-6 mb-4 w-[33vw] inline-block mx-5">
-                    <div className="flex items-center space-x-4 mb-4">
-                      <h3 className="text-lg font-semibold text-white">{post.author.username}</h3>
-                      <p className="text-sm text-slate-400">
-                        {new Date(post.Time).toLocaleString("en-US", {
-                          month: "short",
-                          day: "numeric",
-                          hour: "2-digit",
-                          minute: "2-digit",
-                        })}
-                      </p>
-                      <button
-                        className='hover:text-red-800 flex items-center space-x-2 text-slate-500 transition-colors'
-                        onClick={() => handlePostDelete(post._id)}
-                      >
-                        <Trash />
-                      </button>
-                    </div>
-                    <p className="text-white">{post.postData}</p>
-                  </div>
-                ))
-              ) : (
-                <p className="text-slate-400">No posts available</p>
-              )}
-            </div>
+  {postData && postData.length > 0 ? (
+    postData.map((post) => (
+      <div key={post._id} className="bg-slate-700 rounded-lg shadow-2xl p-6 mb-4 w-[33vw] inline-block mx-5">
+        <div className="flex items-center space-x-4 mb-4">
+          <h3 className="text-lg font-semibold text-white">
+            {post.createdBy?.username || "Unknown User"} {/* Safely access username */}
+          </h3>
+          <p className="text-sm text-slate-400">
+            {new Date(post.createdAt).toLocaleString("en-US", {
+              month: "short",
+              day: "numeric",
+              hour: "2-digit",
+              minute: "2-digit",
+            })}
+          </p>
+          <button
+            className='hover:text-red-800 flex items-center space-x-2 text-slate-500 transition-colors'
+            onClick={() => handlePostDelete(post._id)}
+          >
+            <Trash />
+          </button>
+        </div>
+        <p className="text-white">{post.postData}</p>
+      </div>
+    ))
+  ) : (
+    <p className="text-slate-400">No posts available</p>
+  )}
+</div>
           </div>
         </div>
       </main>

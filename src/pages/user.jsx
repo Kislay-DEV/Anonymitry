@@ -7,17 +7,15 @@ import { Buffer } from 'buffer';
 export default function User() {
   const { userId } = useParams();
   const [user, setUser] = useState({});
-  const [isFollowing, setIsFollowing] = useState();
+  const [isFollowing, setIsFollowing] = useState(false);
 
   useEffect(() => {
     const fetchUser = async () => {
       try {
         const response = await axiosInstance.get(`/api/user/profile/${userId}`);
         setUser(response.data);
-        if (response.data.isFollowing == true) {
-          setIsFollowing(isFollowing);
-        }
-        setIsFollowing(!response.data.isFollowing);
+        setIsFollowing(response.data.isFollowing)
+
       } catch (error) {
         console.error('Error fetching user data:', error);
       }
@@ -39,7 +37,7 @@ export default function User() {
       await axiosInstance.put(`/api/user/unfollow/${userId}`);
       setIsFollowing(false);
     } catch (error) {
-      console.error('Error unfollowing user:', error);
+      console.error('Cant unfollow:', error);
     }
   };
 

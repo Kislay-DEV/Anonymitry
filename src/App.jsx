@@ -15,17 +15,17 @@ import Feed from './pages/feed'
 import Post from './pages/post'
 import Comment from './pages/comment'
 import User from './pages/user'
+import Server from './pages/server'
 
 function App() {
   const [userId, setUserId] = useState(null);
   const isAuthenticated = !!userId; // Determine authentication status
 
   useEffect(() => {
-    // Fetch user data and set userId
     const fetchUserData = async () => {
       try {
         const response = await axiosInstance.get('/api/user');
-        setUserId(response.data._id);
+        setUserId(response.data._id); // Now expects a single user object
       } catch (error) {
         console.error('Error fetching user data:', error);
       }
@@ -46,6 +46,8 @@ function App() {
         <Route path="/post/:postId" element={<Post />} />
         <Route path="/comment/:postId" element={<Comment />} />
         <Route path="/user/profile/:userId" element={<User />} />
+        <Route path="/server" element={<Server />} />
+        
       </Routes>
     </SocketProvider>
   );
