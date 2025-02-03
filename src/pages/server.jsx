@@ -32,7 +32,7 @@ const ServerForm = () => {
 
   return (
     <div className="fixed inset-0 bg-black/70 flex items-center justify-center">
-      <div className="bg-black/75 w-full max-w-md rounded-md shadow-lg">
+      <div className="bg-[#313338] w-full max-w-md rounded-md shadow-lg">
         {/* Header */}
         <div className="relative p-4 text-center border-b border-[#3f4147]">
           <h2 className="text-xl font-bold text-white">Create a Server</h2>
@@ -48,7 +48,7 @@ const ServerForm = () => {
         </div>
 
         {/* Form */}
-        <form  onSubmit={handleSubmit(onSubmit)} className="p-4">
+        <form onSubmit={handleSubmit(onSubmit)} className="p-4">
           {/* Server Icon Upload */}
           <div className="flex justify-center mb-6">
             <div className="relative group">
