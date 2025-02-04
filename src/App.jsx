@@ -15,7 +15,9 @@ import Feed from './pages/feed'
 import Post from './pages/post'
 import Comment from './pages/comment'
 import User from './pages/user'
-import Server from './pages/server'
+import Server from './pages/servercreate'
+import Serverlist from './pages/serverListing'
+import Serverjoin from './pages/serverjoin'
 
 function App() {
   const [userId, setUserId] = useState(null);
@@ -47,6 +49,8 @@ function App() {
         <Route path="/comment/:postId" element={<Comment />} />
         <Route path="/user/profile/:userId" element={<User />} />
         <Route path="/server" element={<Server />} />
+        <Route path="/serverlisting" element={<Serverlist />} />
+        <Route path="/server/:serverId" element={<Serverjoin />} />
         
       </Routes>
     </SocketProvider>

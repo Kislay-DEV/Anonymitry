@@ -13,7 +13,7 @@ if (!PUBLISHABLE_KEY) {
 }
 
 createRoot(document.getElementById('root')).render(
-  <StrictMode>
+  
     <BrowserRouter>
       <AuthProvider>
         <MessageProvider>
@@ -21,5 +21,5 @@ createRoot(document.getElementById('root')).render(
         </MessageProvider>
       </AuthProvider>
     </BrowserRouter>
-  </StrictMode>,
+  ,
 )
