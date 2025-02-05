@@ -48,7 +48,7 @@ export default function ServerListing() {
         >
           {server.serverImage ? (
             <img 
-              src={server.serverImage} 
+              src={`data:image/jpeg;base64,${server.serverImage}`} 
               alt={server.serverName} 
               className="w-full h-48 object-cover"
             />

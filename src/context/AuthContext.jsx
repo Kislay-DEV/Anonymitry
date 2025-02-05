@@ -1,4 +1,5 @@
-import React, { createContext, useContext, useState } from 'react';
+import React, { createContext, useContext, useState, useCallback, useEffect } from 'react';
+import PropTypes from 'prop-types';
 
 const AuthContext = createContext();
 
@@ -11,41 +12,90 @@ export const useAuthContext = () => {
   return context;
 };
 
-// eslint-disable-next-line react/prop-types
 export const AuthProvider = ({ children }) => {
   const [isAuthenticated, setIsAuthenticated] = useState(false);
   const [user, setUser] = useState(null);
-  const [loading, setLoading] = useState(false);
+  const [loading, setLoading] = useState(true);
+  const [error, setError] = useState(null);
 
-  const login = async (userData) => {
+  const login = useCallback(async (userData) => {
     try {
       setLoading(true);
+      setError(null);
+      
+      if (!userData || !userData.name) {
+        throw new Error('Invalid user data');
+      }
+      
       setUser(userData);
       setIsAuthenticated(true);
+      localStorage.setItem('user', JSON.stringify(userData));
+      
+      return userData;
     } catch (error) {
-      console.error('Login error:', error);
+      setError(error.message);
+      setIsAuthenticated(false);
+      setUser(null);
       throw error;
     } finally {
       setLoading(false);
     }
-  };
+  }, []);
 
-  const logout = async () => {
+  const logout = useCallback(async () => {
     try {
       setLoading(true);
+      setError(null);
+      
+      localStorage.removeItem('user');
       setUser(null);
       setIsAuthenticated(false);
     } catch (error) {
-      console.error('Logout error:', error);
+      setError(error.message);
       throw error;
     } finally {
       setLoading(false);
     }
+  }, []);
+
+  const checkAuthStatus = useCallback(async () => {
+    try {
+      const storedUser = localStorage.getItem('user');
+      
+      if (storedUser) {
+        const userData = JSON.parse(storedUser);
+        setUser(userData);
+        setIsAuthenticated(true);
+      }
+    } catch (error) {
+      setError(error.message);
+      localStorage.removeItem('user');
+      setUser(null);
+      setIsAuthenticated(false);
+    } finally {
+      setLoading(false);
+    }
+  }, []);
+
+  useEffect(() => {
+    checkAuthStatus();
+  }, [checkAuthStatus]);
+
+  const value = {
+    isAuthenticated,
+    user,
+    loading,
+    error,
+    login,
+    logout,
+    checkAuthStatus
   };
 
-  return (
-    <AuthContext.Provider value={{ isAuthenticated, user, loading, login, logout }}>
-      {children}
-    </AuthContext.Provider>
-  );
+  return <AuthContext.Provider value={value}>{children}</AuthContext.Provider>;
 };
+
+AuthProvider.propTypes = {
+  children: PropTypes.node.isRequired
+};
+
+export default AuthContext;

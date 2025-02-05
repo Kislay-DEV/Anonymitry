@@ -18,6 +18,8 @@ import User from './pages/user'
 import Server from './pages/servercreate'
 import Serverlist from './pages/serverListing'
 import Serverjoin from './pages/serverjoin'
+import ServerPanel from './pages/serverPanel'
+import { AuthProvider } from './context/AuthContext'
 
 function App() {
   const [userId, setUserId] = useState(null);
@@ -36,6 +38,8 @@ function App() {
   }, []);
 
   return (
+    <AuthProvider>
+
     <SocketProvider isAuthenticated={isAuthenticated}>
       <Routes>
         <Route path="/" element={<Login />} />
@@ -51,9 +55,12 @@ function App() {
         <Route path="/server" element={<Server />} />
         <Route path="/serverlisting" element={<Serverlist />} />
         <Route path="/server/:serverId" element={<Serverjoin />} />
+        <Route path="/serverpanel/:serverId" element={<ServerPanel />} />
+        
         
       </Routes>
     </SocketProvider>
+    </AuthProvider>
   );
 }
 

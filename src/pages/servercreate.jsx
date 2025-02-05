@@ -2,8 +2,10 @@ import React, { useState } from 'react';
 import { useForm } from "react-hook-form";
 import axiosInstance from '@/axiosConfig';
 import { Upload, X } from 'lucide-react';
+import { useNavigate } from 'react-router-dom';
 
 const ServerForm = () => {
+  const navigate = useNavigate();
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [showModal, setShowModal] = useState(true);
   const [serverIcon, setServerIcon] = useState(null);
@@ -18,9 +20,8 @@ const ServerForm = () => {
   const onSubmit = async (data) => {
     setIsSubmitting(true);
     try {
-      await axiosInstance.post('/api/server', data);
-      setShowModal(false);
-      reset();
+     const response = await axiosInstance.post('/api/server', data);
+      navigate(`/serverpanel/${response.data.serverId}`)
     } catch (error) {
       console.error(error);
     } finally {
